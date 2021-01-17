@@ -8,21 +8,18 @@
 
 import UIKit
 
-final class AppDetailViewController: UIViewController {
+final class SongDetailViewController: UIViewController {
     
-    public var app: ITunesApp
+    public var song: ITunesSong
     
-    lazy var headerViewController = AppDetailHeaderViewController(app: app)
-    lazy var versionDetailsViewController = AppDetailVersionDetailsViewController(app: app)
+    lazy var headerViewController = SongDetailHeaderViewController(song: song)
 
-    private let imageDownloader = ImageDownloader()
-    
-    private var appDetailView: AppDetailView {
-        return self.view as! AppDetailView
+    private var songDetailView: SongDetailView {
+        return self.view as! SongDetailView
     }
     
-    init(app: ITunesApp) {
-        self.app = app
+    init(song: ITunesSong) {
+        self.song = song
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,13 +51,6 @@ final class AppDetailViewController: UIViewController {
             controller: headerViewController,
             topAnchor: self.view.safeAreaLayoutGuide.topAnchor
         )
-        addChildViewController(
-            controller: versionDetailsViewController,
-            topAnchor: headerViewController.view.bottomAnchor
-        )
-        NSLayoutConstraint.activate([
-            versionDetailsViewController.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-        ])
         addDescriptionViewController()
         
     }
@@ -80,7 +70,6 @@ final class AppDetailViewController: UIViewController {
     }
     
     private func addDescriptionViewController() {
-        // Дз: Добавить дочерний вью контроллер
         let vc = UIViewController()
         
         self.addChild(vc)

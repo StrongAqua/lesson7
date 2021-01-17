@@ -9,9 +9,15 @@
 import UIKit
 
 class SearchBuilder {
-    static func build() -> (UIViewController & SearchViewInput) {
-        let presenter = Presenter()
-        let viewController = SearchViewController(presenter: presenter)
+    static func buildAppsSearch() -> (UIViewController & SearchViewInput) {
+        let presenter = AppsSearchPresenter()
+        let viewController = AppsSearchViewController(presenter: presenter)
+        presenter.viewInput = viewController
+        return viewController
+    }
+    static func buildSongsSearch() -> (UIViewController & SearchViewInput) {
+        let presenter = SongsSearchPresenter()
+        let viewController = SongsSearchViewController(presenter: presenter)
         presenter.viewInput = viewController
         return viewController
     }

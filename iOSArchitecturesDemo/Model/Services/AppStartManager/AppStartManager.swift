@@ -18,23 +18,41 @@ final class AppStartManager {
     
     func start() {
         
+        let rootVC = TabBarController()
         
-        let rootVC = SearchBuilder.build()
-        rootVC.navigationItem.title = "Search via iTunes"
+        let searchAppImage = UIImage(named: "search_app")?.resized(to: CGSize(width: 30, height: 30))
+        let appsTabBarItem = UITabBarItem(
+            title: "",
+            image: searchAppImage,
+            tag: 0
+        )
+        let appsVC = SearchBuilder.buildAppsSearch()
+        appsVC.tabBarItem = appsTabBarItem
+        appsVC.navigationItem.title = "Search Apps"
         
-        let navVC = self.configuredNavigationController
-        navVC.viewControllers = [rootVC]
+        let songsAppImage = UIImage(named: "search_song")?.resized(to: CGSize(width: 30, height: 30))
+        let songsTabBarItem = UITabBarItem(
+            title: "",
+            image: songsAppImage,
+            tag: 1
+        )
+        let songsVC = SearchBuilder.buildSongsSearch()
+        songsVC.tabBarItem = songsTabBarItem
+        songsVC.navigationItem.title = "Search Songs"
         
-        window?.rootViewController = navVC
+        rootVC.viewControllers = [appsVC, songsVC].map { createNavController(rootViewController: $0) }
+        
+        window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
+        
     }
     
-    private lazy var configuredNavigationController: UINavigationController = {
-        let navVC = UINavigationController()
+    private func createNavController(rootViewController: UIViewController) -> UINavigationController {
+        let navVC = UINavigationController(rootViewController: rootViewController)
         navVC.navigationBar.barTintColor = UIColor.varna
         navVC.navigationBar.isTranslucent = false
         navVC.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         return navVC
-    }()
+    }
 }
