@@ -6,8 +6,6 @@
 //  Copyright © 2021 ekireev. All rights reserved.
 //
 
-import UIKit
-
 protocol SearchViewInput: AnyObject {
     var searchResults: [Any] { get set }
     
