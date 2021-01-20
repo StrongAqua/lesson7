@@ -8,21 +8,7 @@
 
 import UIKit
 
-protocol SearchViewInput: AnyObject {
-    var searchResults: [ITunesApp] { get set }
-    
-    func showError(error: Error)
-    func showNoResults()
-    func hideNoResults()
-    func throbber(show: Bool)
-}
-
-protocol SearchViewOutput: AnyObject {
-    func viewDidSearch(with query: String)
-    func viewDidSelectApp(app: ITunesApp)
-}
-
-class Presenter {
+class AppsSearchPresenter {
     weak var viewInput: (UIViewController & SearchViewInput)?
     
     private let searchService = ITunesSearchService()
@@ -53,17 +39,24 @@ class Presenter {
         
         viewInput?.navigationController?.pushViewController(appDetailViewController, animated: true)
     }
+    
+    func getOutput() -> SearchViewOutput {
+        return self
+    }
+    
+    func setInput(_ input: (UIViewController & SearchViewInput)) {
+        viewInput = input
+    }
+
 }
 
-extension Presenter: SearchViewOutput {
+extension AppsSearchPresenter: SearchViewOutput {
     func viewDidSearch(with query: String) {
         viewInput?.throbber(show: true)
         requestApp(with: query)
     }
     
-    func viewDidSelectApp(app: ITunesApp) {
-        openDetails(for: app)
+    func viewDidSelect(object: Any) {
+        openDetails(for: object as! ITunesApp)
     }
-    
-    
 }
