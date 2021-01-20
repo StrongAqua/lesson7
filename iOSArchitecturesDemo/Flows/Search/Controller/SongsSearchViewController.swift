@@ -45,9 +45,6 @@ extension SongsSearchViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let object = searchResults[indexPath.row]
         guard let song = object as? ITunesSong else {return}
-        let songDetailsViewController = SongDetailViewController(song: song)
-        songDetailsViewController.song = song
-
         presenter.viewDidSelect(object: song)
     }
 }

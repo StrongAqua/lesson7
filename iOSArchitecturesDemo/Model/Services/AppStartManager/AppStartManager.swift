@@ -26,7 +26,7 @@ final class AppStartManager {
             image: searchAppImage,
             tag: 0
         )
-        let appsVC = SearchBuilder.buildAppsSearch()
+        let appsVC = SearchBuilder.buildAppsSearchController()
         appsVC.tabBarItem = appsTabBarItem
         appsVC.navigationItem.title = "Search Apps"
         
@@ -36,7 +36,7 @@ final class AppStartManager {
             image: songsAppImage,
             tag: 1
         )
-        let songsVC = SearchBuilder.buildSongsSearch()
+        let songsVC = SearchBuilder.buildSongsSearchController()
         songsVC.tabBarItem = songsTabBarItem
         songsVC.navigationItem.title = "Search Songs"
         

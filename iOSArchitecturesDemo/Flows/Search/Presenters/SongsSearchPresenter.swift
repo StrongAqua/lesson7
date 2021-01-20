@@ -6,45 +6,37 @@
 //  Copyright © 2021 ekireev. All rights reserved.
 //
 
-import UIKit
-
 class SongsSearchPresenter {
-    weak var viewInput: (UIViewController & SearchViewInput)?
+
+    let interactor: SearchInteractorProtocol
+    let router: SearchRouterProtocol
+    
+    init(interactor: SearchInteractorProtocol, router: SearchRouterProtocol) {
+        self.interactor = interactor
+        self.router = router
+    }
+
+    weak var viewInput: SearchViewInput?
     
     private let searchService = ITunesSearchService()
     
     private func requestSongs(with query: String) {
-        self.searchService.getSongs(forQuery: query) { [weak self] result in
-            guard let self = self else { return }
+        self.interactor.request(with: query, completion: {
+            [weak self] songs, error in
+            guard let self = self else {return}
             
             self.viewInput?.throbber(show: false)
-            result
-                .withValue { songs in
-                    guard !songs.isEmpty else {
-                        self.viewInput?.showNoResults()
-                        return
-                    }
-                    
-                    self.viewInput?.hideNoResults()
-                    self.viewInput?.searchResults = songs
+            if let error = error {
+                self.viewInput?.showError(error: error)
+            } else {
+                if songs.isEmpty {
+                    self.viewInput?.showNoResults()
+                    return
                 }
-                .withError { (error) in
-                    self.viewInput?.showError(error: error)
-                }
-        }
-    }
-    
-    private func openDetails(for song: ITunesSong) {
-        let songDetailViewController = SongDetailViewController(song: song)
-        viewInput?.navigationController?.pushViewController(songDetailViewController, animated: true)
-    }
-    
-    func getOutput() -> SearchViewOutput {
-        return self
-    }
-    
-    func setInput(_ input: (UIViewController & SearchViewInput)) {
-        viewInput = input
+                self.viewInput?.hideNoResults()
+                self.viewInput?.searchResults = songs
+            }
+        })
     }
 }
 
@@ -55,8 +47,6 @@ extension SongsSearchPresenter: SearchViewOutput {
     }
     
     func viewDidSelect(object: Any) {
-        openDetails(for: object as! ITunesSong)
+        self.router.openDetails(for: object)
     }
-    
-    
 }

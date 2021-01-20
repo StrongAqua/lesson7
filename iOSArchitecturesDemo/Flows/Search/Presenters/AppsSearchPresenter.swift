@@ -39,15 +39,6 @@ class AppsSearchPresenter {
         
         viewInput?.navigationController?.pushViewController(appDetailViewController, animated: true)
     }
-    
-    func getOutput() -> SearchViewOutput {
-        return self
-    }
-    
-    func setInput(_ input: (UIViewController & SearchViewInput)) {
-        viewInput = input
-    }
-
 }
 
 extension AppsSearchPresenter: SearchViewOutput {
